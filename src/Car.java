@@ -8,23 +8,13 @@ import java.awt.*;
  * @author Matilda
  */
 
-public abstract class Car implements Movable{
+public abstract class Car implements IMoveable {
 
     private int nrDoors;
-    protected double enginePower;
-    private double currentSpeed;
     private Color color;
     private String modelName;
-
-    private double x;
-    private double y;
-    private Orientation orientation;
-    private enum Orientation{
-        UP,
-        LEFT,
-        DOWN,
-        RIGHT
-    }
+    private double weight;
+    protected Moveable parentMoveable;
 
     /**
      * Constructor that sets initial values, and stops the car's engine.
@@ -34,34 +24,75 @@ public abstract class Car implements Movable{
      * @param color Color
      * @param modelName Model Name
      */
-    public Car(int nrDoors, double enginePower, Color color, String modelName) {
+    public Car(int nrDoors, double enginePower, double weight, Color color, String modelName) {
         this.nrDoors = nrDoors;
-        this.enginePower = enginePower;
+        this.weight = weight;
         this.color = color;
         this.modelName = modelName;
-        x = 0;
-        y = 0;
-        orientation = Orientation.UP;
+        parentMoveable = new Moveable(enginePower);
         stopEngine();
     }
+
 
     /**
      * Constructor without parameters
      */
     public Car(){
-        this(0, 0, null, null);
+        this(0, 0, 0, null, null);
+        parentMoveable = new Moveable(0);
     }
 
     public int getNrDoors() {
         return nrDoors;
     }
 
+    public double getWeight() {
+        return weight;
+    }
+
     public double getEnginePower() {
-        return enginePower;
+        return parentMoveable.getEnginePower();
     }
 
     public double getCurrentSpeed() {
-        return currentSpeed;
+        return parentMoveable.getCurrentSpeed();
+    }
+
+
+    public void setCurrentSpeed(double amount) {
+        parentMoveable.setCurrentSpeed(amount);
+    }
+
+    public Orientation getOrientation() {
+        return parentMoveable.getOrientation();
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public double getX() {
+        return getPosition().getX();
+    }
+
+    public double getY() {
+        return getPosition().getY();
+    }
+
+    public void setX(double x) {
+        parentMoveable.setX(x);
+    }
+
+    public void setY(double y) {
+        parentMoveable.setY(y);
+    }
+
+    public void setPosition(Point p) {
+        parentMoveable.setPosition(p);
+    }
+
+    public Point getPosition() {
+        return parentMoveable.getPosition();
     }
 
     public Color getColor() {
@@ -72,18 +103,22 @@ public abstract class Car implements Movable{
         this.color = color;
     }
 
+    public boolean isMoving() {
+        return parentMoveable.isMoving();
+    }
+
     /**
      * Sets the car's speed to 0.1
      */
     public void startEngine(){
-        currentSpeed = 0.1;
+        setCurrentSpeed(0.1);
     }
 
     /**
      * Sets the car's speed to 0
      */
     public void stopEngine(){
-        currentSpeed = 0;
+        setCurrentSpeed(0);
     }
 
     /**
@@ -91,40 +126,15 @@ public abstract class Car implements Movable{
      * when the gas() and break() methods are called
      * @return the car's speed factor
      */
-    protected abstract double speedFactor();
-
-
-    private void incrementSpeed(double amount){
-        currentSpeed = getCurrentSpeed() + speedFactor() * amount;
-        if (currentSpeed>enginePower){
-            currentSpeed=enginePower;
-        }
-    }
-
-    private void decrementSpeed(double amount){
-        currentSpeed = getCurrentSpeed() - speedFactor() * amount;
-        if (currentSpeed<0){
-            currentSpeed=0;
-        }
+    public double speedFactor() {
+        return parentMoveable.speedFactor();
     }
 
     /**
      * Method that changes car's x- and y position according to it's current speed and orientation
      */
     public void move(){
-        switch (orientation){
-            case RIGHT:
-                x+=currentSpeed;
-                break;
-            case LEFT:
-                x-=currentSpeed;
-            case UP:
-                y+=currentSpeed;
-                break;
-            case DOWN:
-                y-=currentSpeed;
-                break;
-        }
+        parentMoveable.move();
     }
 
     /**
@@ -132,14 +142,14 @@ public abstract class Car implements Movable{
      * of enums to get the "next" orientation.
      */
     public void turnLeft(){
-        orientation=Orientation.values()[(orientation.ordinal()+1)%4];
+        parentMoveable.turnLeft();
     }
 
     /**
-     * The same as turnLeft(), except it gets the previous value in the array
+     * The same as turnLeft(), except it gets the previous value in the array (3=-1)%4
      */
     public void turnRight(){
-        orientation=Orientation.values()[(orientation.ordinal()+3)%4];
+        parentMoveable.turnRight();
     }
 
     /**
@@ -147,10 +157,7 @@ public abstract class Car implements Movable{
      * @param amount, where amount lies in the interval [0,1]
      */
     public void gas(double amount){
-        if (amount<0||amount>1){
-            throw new IllegalArgumentException("Invalid amount");
-        }
-        incrementSpeed(amount);
+        parentMoveable.gas(amount);
     }
 
     /**
@@ -158,12 +165,7 @@ public abstract class Car implements Movable{
      * @param amount, where amount lies in the interval [0,1]
      */
     public void brake(double amount){
-        if (amount<0||amount>1){
-            throw new IllegalArgumentException();
-        }
-        decrementSpeed(amount);
+        parentMoveable.brake(amount);
     }
-
-
 
 }
