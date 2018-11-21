@@ -10,6 +10,7 @@ public class CarTransport extends Car implements ITiltable, ITransport{
         parentTransport = new Transport(10, 20000, parentMoveable);
     }
 
+
     public boolean isRampOpen() {
         return parentTransport.isRampOpen();
     }

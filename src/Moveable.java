@@ -13,6 +13,11 @@ public class Moveable {
         orientation = Orientation.UP;
     }
 
+    /**
+     * Returns the distance between two IMoveables.
+     * @param moveable moveable to find distance to
+     * @return the distance between the this and moveable
+     */
     public double distance (IMoveable moveable) {
         double dx = getX()-moveable.getX();
         double dy = getY()-moveable.getY();
@@ -23,22 +28,18 @@ public class Moveable {
     /**
      * Abstract method that returns a factor used in determining how much the car's speed should increase or decrease
      * when the gas() and break() methods are called
-     * @return the car's speed factor
+     * @return the moveable's speed factor
      */
     protected double speedFactor() {
         return 1;
     }
 
+    /**
+     * Checks weather this is moving
+     * @return true if this is moving, else false
+     */
     public boolean isMoving() {
         return currentSpeed != 0;
-    }
-
-    public void setPosition(Point p) {
-        position = p;
-    }
-
-    public Point getPosition() {
-        return position;
     }
 
     private void incrementSpeed(double amount){
@@ -56,7 +57,7 @@ public class Moveable {
     }
 
     /**
-     * Method that changes car's x- and y position according to it's current speed and orientation
+     * Method that changes moveable's x- and y position according to it's current speed and orientation
      */
     public void move(){
         switch (getOrientation()){
@@ -76,23 +77,22 @@ public class Moveable {
     }
 
     /**
-     * Method that changes that changes the car's orientation depending on it's current orientation. It uses an array
-     * of enums to get the "next" orientation.
+     * Method that changes that changes the moveable's orientation depending on it's current orientation.
      */
     public void turnLeft(){
         orientation= Orientation.values()[(orientation.ordinal()+1)%4];
     }
 
     /**
-     * The same as turnLeft(), except it gets the previous value in the array (3=-1)%4
+     * Method that changes that changes the moveable's orientation depending on it's current orientation.
      */
     public void turnRight(){
         orientation= Orientation.values()[(orientation.ordinal()+3)%4];
     }
 
     /**
-     * Method that increases the car's speed depending on amount. The car's speed can never exceed the engine power
-     * @param amount, where amount lies in the interval [0,1]
+     * Method that increases the moveable's speed depending on amount. The car's speed can never exceed the engine power.
+     * @param amount an amount of brake between 0 and 1
      */
     public void gas(double amount){
         if (amount<0||amount>1){
@@ -102,8 +102,8 @@ public class Moveable {
     }
 
     /**
-     * Method that decreases the car's speed depending on amount. The car's speed can never be less than zero
-     * @param amount, where amount lies in the interval [0,1]
+     * Method that decreases the moveasble's speed depending on amount. The car's speed can never be less than zero.
+     * @param amount an amount of brake between 0 and 1
      */
     public void brake(double amount){
         if (amount<0||amount>1){
@@ -112,38 +112,90 @@ public class Moveable {
         decrementSpeed(amount);
     }
 
+    /**
+     * Gets position.
+     * @return position
+     */
+    public Point getPosition() {
+        return position;
+    }
+
+    /**
+     * Sets position.
+     * @param p new position
+     */
+    public void setPosition(Point p) {
+        position = p;
+    }
+
+    /**
+     * Gets current speed.
+     * @return current speed
+     */
     public double getCurrentSpeed() {
         return currentSpeed;
     }
 
-    public void setCurrentSpeed(double currentSpeed) {
-        this.currentSpeed = currentSpeed;
+    /**
+     * Sets new speed.
+     * @param speed new speed
+     */
+    public void setCurrentSpeed(double speed) {
+        this.currentSpeed = speed;
     }
 
-    public void setOrientation(Orientation orientation) {
-        this.orientation = orientation;
-    }
-
+    /**
+     * Gets moveable's orientation.
+     * @return current orientation
+     */
     public Orientation getOrientation() {
         return orientation;
     }
 
-    public void setX(double x) {
-        position.setX(x);
+    /**
+     * Sets orientation.
+     * @param orientation new orientation
+     */
+    public void setOrientation(Orientation orientation) {
+        this.orientation = orientation;
     }
 
-    public void setY(double y) {
-        position.setY(y);
-    }
-
+    /**
+     * Gets current x-position.
+     * @return current x-position
+     */
     public double getX() {
         return position.getX();
     }
 
+    /**
+     * Sets x-position.
+     * @param x new x-position
+     */
+    public void setX(double x) {
+        position.setX(x);
+    }
+
+    /**
+     * Gets current y-position.
+     * @return current y-position
+     */
     public double getY() {
         return position.getY();
     }
 
+    /**
+     * Sets y-position.
+     * @param y new y-position
+     */
+    public void setY(double y) {
+        position.setY(y);
+    }
+
+    /**
+     * Gets the moveable's engine power.
+     * @return engine power
+     */
     public double getEnginePower() {
         return enginePower;
     }
