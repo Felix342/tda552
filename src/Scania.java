@@ -4,7 +4,7 @@ public class Scania extends Car implements ITiltable {
     private double angle;
 
     public Scania(){
-        super(2, 100, 1800, Color.RED, "Scania");
+        super(2, 100, 5001, Color.RED, "Scania");
         angle = 0;
     }
 
@@ -13,7 +13,7 @@ public class Scania extends Car implements ITiltable {
     }
 
     public void tiltUp() {
-        if (getCurrentSpeed() == 0) {
+        if (!isMoving()) {
             this.angle += getTiltFactor();
             if (this.angle > 70) {
                 this.angle = 70;

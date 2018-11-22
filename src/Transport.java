@@ -22,13 +22,14 @@ class Transport implements ITransport, ITiltable {
 
     @Override
     public void tiltDown() {
-        if (parentMoveable.isMoving())
-        rampOpen = true;
+        if (!parentMoveable.isMoving()) {
+            rampOpen = true;
+        }
     }
 
     @Override
     public boolean load(Car c) {
-        if (rampOpen && parentMoveable.distance(c) <= 2 && cars.size() < maxCars && getCargoWeight() <= maxWeight &&
+        if (rampOpen && parentMoveable.distance(c) <= 2 && cars.size() < maxCars && getCargoWeight() + c.getWeight() <= maxWeight &&
                 c.parentMoveable != parentMoveable) {
             c.setPosition(parentMoveable.getPosition());
             return cars.add(c);

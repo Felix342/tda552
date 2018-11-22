@@ -30,6 +30,10 @@ public class Ferry implements IMoveable, ITiltable, ITransport {
         parentMoveable.turnRight();
     }
 
+    public Orientation getOrientation() {
+        return parentMoveable.getOrientation();
+    }
+
     @Override
     public boolean isMoving() {
         return parentMoveable.isMoving();
@@ -38,6 +42,14 @@ public class Ferry implements IMoveable, ITiltable, ITransport {
     @Override
     public double getCurrentSpeed() {
         return parentMoveable.getCurrentSpeed();
+    }
+
+    public void gas(double amount) {
+        parentMoveable.gas(amount);
+    }
+
+    public void brake(double amount) {
+        parentMoveable.brake(amount);
     }
 
     @Override
