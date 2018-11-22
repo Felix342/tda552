@@ -42,15 +42,15 @@ public class Moveable {
         return currentSpeed != 0;
     }
 
-    private void incrementSpeed(double amount){
-        setCurrentSpeed(getCurrentSpeed() + speedFactor() * amount);
+    private void incrementSpeed(double amount, double speedFactor){
+        setCurrentSpeed(getCurrentSpeed() + speedFactor * amount);
         if (getCurrentSpeed()>enginePower){
             setCurrentSpeed(enginePower);
         }
     }
 
-    private void decrementSpeed(double amount){
-        setCurrentSpeed(getCurrentSpeed() - speedFactor() * amount);
+    private void decrementSpeed(double amount, double speedFactor){
+        setCurrentSpeed(getCurrentSpeed() - speedFactor * amount);
         if (getCurrentSpeed()<0){
             setCurrentSpeed(0);
         }
@@ -95,10 +95,19 @@ public class Moveable {
      * @param amount an amount of brake between 0 and 1
      */
     public void gas(double amount){
+        gas(amount, 1);
+    }
+
+    /**
+     * Method that increases the moveable's speed depending on amount and speed factor. The car's speed can never exceed the engine power.
+     * @param amount an amount of brake between 0 and 1
+     * @param speedFactor Gets speed factor from vehicle.
+     */
+    public void gas(double amount, double speedFactor) {
         if (amount<0||amount>1){
             throw new IllegalArgumentException("Invalid amount");
         }
-        incrementSpeed(amount);
+        incrementSpeed(amount, speedFactor);
     }
 
     /**
@@ -106,10 +115,19 @@ public class Moveable {
      * @param amount an amount of brake between 0 and 1
      */
     public void brake(double amount){
+        brake(amount, 1);
+    }
+
+    /**
+     * Method that decreases the moveasble's speed depending on amount and speed factor. The car's speed can never be less than zero.
+     * @param amount an amount of brake between 0 and 1
+     * @param speedFactor Gets speed factor from vehicle.
+     */
+    public void brake(double amount, double speedFactor) {
         if (amount<0||amount>1){
             throw new IllegalArgumentException("Invalid amount");
         }
-        decrementSpeed(amount);
+        decrementSpeed(amount, speedFactor);
     }
 
     /**

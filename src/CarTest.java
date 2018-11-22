@@ -1,62 +1,168 @@
 import org.junit.jupiter.api.Test;
 
+import javax.print.attribute.standard.OrientationRequested;
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CarTest {
-/*
-    @org.junit.jupiter.api.Test
-    void speedChange() {
 
-        Car car1 = new Saab95();
-        car1.gas(1);
-        assertEquals(1.25, car1.getCurrentSpeed());
+    @Test
+    void carMethodsTest() {
+        Saab95 car = new Saab95();
+        car.startEngine();
+        assertEquals(0.1, car.getCurrentSpeed());
+
+        car.move();
+        assertEquals(0.1, car.getY());
+        assertEquals(0, car.getX());
+
+        car.turnRight();
+        car.turnRight();
+        assertEquals(Orientation.DOWN, car.getOrientation());
+
+        car.turnLeft();
+        assertEquals(Orientation.RIGHT, car.getOrientation());
+
+        car.gas(1);
+        assertEquals(1.35, car.getCurrentSpeed());
         Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
-            car1.gas(5);
+            car.gas(5);;
         });
         assertEquals("Invalid amount", exception.getMessage());
-        car1.brake(0.5);
-        assertEquals(0.625, car1.getCurrentSpeed());
+
+        car.setTurboOn();
+        car.gas(1);
+        assertEquals(2.975, car.getCurrentSpeed());
+        car.setTurboOff();
+
+
+        car.brake(1);
+        assertEquals(1.725, car.getCurrentSpeed());
+
+        car.stopEngine();
+        assertEquals(0, car.getCurrentSpeed());
+
+        Volvo240 volvo = new Volvo240();
+        volvo.startEngine();
+        volvo.gas(1);
+        assertEquals(1.35, volvo.getCurrentSpeed());
     }
 
     @Test
-    void turn(){
+    void scaniaMethodsTest() {
+        Scania scania = new Scania();
 
+        scania.tiltUp();
+        assertEquals(10, scania.getAngle());
+
+        scania.tiltUp();
+        scania.tiltUp();
+        scania.tiltUp();
+        scania.tiltUp();
+        scania.tiltUp();
+        scania.tiltUp();
+        assertEquals(70, scania.getAngle());
+        scania.tiltUp();
+        assertEquals(70, scania.getAngle());
+
+        scania.tiltDown();
+        assertEquals(60, scania.getAngle());
+
+        scania.gas(1);
+        assertEquals(0, scania.getCurrentSpeed());
+
+        scania.tiltDown();
+        scania.tiltDown();
+        scania.tiltDown();
+        scania.tiltDown();
+        scania.tiltDown();
+        scania.tiltDown();
+
+        scania.startEngine();
+        scania.gas(1);
+        assertEquals(1.1, scania.getCurrentSpeed());
+
+        scania.tiltUp();
+    }
+
+    @Test
+    void ferryMethodsTest() {
+        Ferry ferry = new Ferry();
         Car car1 = new Volvo240();
-        assertEquals(Car.Orientation.UP, car1.getOrientation());
-        car1.turnLeft();
-        assertEquals(Car.Orientation.LEFT, car1.getOrientation());
-        Car car2 = new Saab95();
-        car2.turnRight();
-        assertEquals(Car.Orientation.RIGHT, car2.getOrientation());
 
+        ferry.tiltDown();
+        ferry.load(car1);
+        assertEquals(car1, ferry.getCars().get(0));
+
+        for (int i = 0; i < 50; i++) {
+            ferry.load(new Volvo240());
+        }
+
+        assertEquals(50, ferry.getCars().size());
+
+        for (int i = 0; i < 55; i++) {
+            ferry.unload();
+        }
+
+        for (int i = 0; i < 50; i++) {
+            ferry.load(new Scania());
+        }
+
+        assertEquals(19, ferry.getCars().size());
+
+        ferry.gas(1);
+        assertEquals(1, ferry.getCurrentSpeed());
+
+        ferry.move();
+        assertEquals(1, ferry.getY());
+
+        ferry.turnLeft();
+        ferry.turnLeft();
+        assertEquals(Orientation.DOWN, ferry.getOrientation());
+
+        ferry.turnRight();
+        ferry.turnRight();
+        assertEquals(Orientation.UP, ferry.getOrientation());
+
+        ferry.brake(1);
+        assertEquals(0, ferry.getCurrentSpeed());
     }
+
 
     @Test
-    void move() {
-        Car car1 = new Volvo240();
-        car1.gas(1);
-        car1.move();
-        assertEquals(1.25, car1.getY());
-        assertEquals(0, car1.getX());
-        car1.turnRight();
-        car1.move();
-        assertEquals(1.25, car1.getX());
-        assertEquals(1.25, car1.getY());
+    void carTransportsMethod(){
+
+        CarTransport cart = new CarTransport();
+       cart.tiltDown();
+        for (int i = 0; i < 11; i++) {
+            cart.load(new Volvo240());
+        }
+        assertEquals(10,cart.getCars().size());
+
+        cart.unload();
+        cart.load(new Scania());
+
+        assertEquals(9,cart.getCars().size());
+
+        cart.unload();
+        Volvo240 v = new Volvo240();
+        v.setPosition(new Point(50, 50));
+        assertFalse(cart.load(v));
+
+        cart.gas(1);
+        cart.move();
+        assertEquals(cart.getPosition(), cart.getCars().get(0).getPosition());
+
+        Car c = cart.unload();
+        cart.move();
+        assertTrue(cart.getPosition() != c.getPosition());
+
+
+        cart.tiltUp();
+        assertFalse(cart.isRampOpen());
     }
 
-    @Test
-    void scania() {
-        Scania scania1 = new Scania();
-        scania1.tiltUp();
-        assertEquals(45, scania1.getAngle());
-        scania1.gas(0.5);
-        assertEquals(0, scania1.getCurrentSpeed());
-        scania1.tiltDown();
-        assertEquals(0, scania1.getAngle());
-        scania1.gas(0.5);
-        assertEquals(0.5, scania1.getCurrentSpeed());
-        scania1.tiltUp();
-        assertEquals(0, scania1.getAngle());
-    }
-*/
+
+
 }

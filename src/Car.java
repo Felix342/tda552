@@ -157,7 +157,7 @@ public abstract class Car implements IMoveable {
      * @param amount, where amount lies in the interval [0,1]
      */
     public void gas(double amount){
-        parentMoveable.gas(amount);
+        parentMoveable.gas(amount, speedFactor());
     }
 
     /**
@@ -165,7 +165,7 @@ public abstract class Car implements IMoveable {
      * @param amount, where amount lies in the interval [0,1]
      */
     public void brake(double amount){
-        parentMoveable.brake(amount);
+        parentMoveable.brake(amount, speedFactor());
     }
 
 }
