@@ -1,4 +1,4 @@
-public class Moveable {
+public class Moveable implements IMoveable {
 
     private double currentSpeed;
     private Point position;
@@ -10,7 +10,7 @@ public class Moveable {
         this.enginePower = enginePower;
         currentSpeed = 0;
         position = new Point(0, 0);
-        orientation = Orientation.UP;
+        orientation = Orientation.RIGHT;
     }
 
     /**
@@ -68,10 +68,10 @@ public class Moveable {
                 setX(getX()-getCurrentSpeed());
                 break;
             case UP:
-                setY(getY()+getCurrentSpeed());
+                setY(getY()-getCurrentSpeed());
                 break;
             case DOWN:
-                setY(getY()-getCurrentSpeed());
+                setY(getY()+getCurrentSpeed());
                 break;
         }
     }

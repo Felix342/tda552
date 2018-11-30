@@ -9,7 +9,7 @@ class CarTest {
 
     @Test
     void carMethodsTest() {
-        Saab95 car = new Saab95();
+        Saab95 car = new Saab95(0, 0);
         car.startEngine();
         assertEquals(0.1, car.getCurrentSpeed());
 
@@ -43,7 +43,7 @@ class CarTest {
         car.stopEngine();
         assertEquals(0, car.getCurrentSpeed());
 
-        Volvo240 volvo = new Volvo240();
+        Volvo240 volvo = new Volvo240(0, 0);
         volvo.startEngine();
         volvo.gas(1);
         assertEquals(1.35, volvo.getCurrentSpeed());
@@ -51,7 +51,7 @@ class CarTest {
 
     @Test
     void scaniaMethodsTest() {
-        Scania scania = new Scania();
+        Scania scania = new Scania(0, 0);
 
         scania.tiltUp();
         assertEquals(10, scania.getAngle());
@@ -89,14 +89,14 @@ class CarTest {
     @Test
     void ferryMethodsTest() {
         Ferry ferry = new Ferry();
-        Car car1 = new Volvo240();
+        Car car1 = new Volvo240(0, 0);
 
         ferry.tiltDown();
         ferry.load(car1);
         assertEquals(car1, ferry.getCars().get(0));
 
         for (int i = 0; i < 50; i++) {
-            ferry.load(new Volvo240());
+            ferry.load(new Volvo240(0, 0));
         }
 
         assertEquals(50, ferry.getCars().size());
@@ -106,7 +106,7 @@ class CarTest {
         }
 
         for (int i = 0; i < 50; i++) {
-            ferry.load(new Scania());
+            ferry.load(new Scania(0, 0));
         }
 
         assertEquals(19, ferry.getCars().size());
@@ -133,20 +133,20 @@ class CarTest {
     @Test
     void carTransportsMethod(){
 
-        CarTransport cart = new CarTransport();
+        CarTransport cart = new CarTransport(0, 0);
        cart.tiltDown();
         for (int i = 0; i < 11; i++) {
-            cart.load(new Volvo240());
+            cart.load(new Volvo240(0, 0));
         }
         assertEquals(10,cart.getCars().size());
 
         cart.unload();
-        cart.load(new Scania());
+        cart.load(new Scania(0, 0));
 
         assertEquals(9,cart.getCars().size());
 
         cart.unload();
-        Volvo240 v = new Volvo240();
+        Volvo240 v = new Volvo240(0, 0);
         v.setPosition(new Point(50, 50));
         assertFalse(cart.load(v));
 

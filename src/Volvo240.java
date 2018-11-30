@@ -1,4 +1,7 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Volvo240 extends Car{
 
@@ -7,8 +10,14 @@ public class Volvo240 extends Car{
     /**
      * Standard values for a Volvo240.
      */
-    public Volvo240(){
-        super(4, 100, 1700, Color.BLACK, "Volvo240");
+    public Volvo240(double x, double y){
+        super(4, 125, 1700, Color.BLACK, "Volvo240", x, y);
+        try {
+            setImage(ImageIO.read(new File("src\\pics\\Volvo240.jpg")));
+        } catch (IOException e) {
+
+        }
+
     }
 
     /**

@@ -1,4 +1,7 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Saab95 extends Car{
 
@@ -7,8 +10,13 @@ public class Saab95 extends Car{
     /**
      * Standard values for a Saab95
      */
-    public Saab95(){
-        super(2, 125, 2000, Color.RED, "Saab95");
+    public Saab95(double x, double y){
+        super(2, 125, 2000, Color.RED, "Saab95", x, y);
+        try {
+            setImage(ImageIO.read(new File("src\\pics\\Saab95.jpg")));
+        } catch (IOException e) {
+
+        }
         turboOn = false;
     }
 
@@ -32,7 +40,7 @@ public class Saab95 extends Car{
     @Override
     public double speedFactor(){
         double turbo = 1;
-        if(turboOn) turbo = 1.3;
+        if(turboOn) turbo = 2;
         return getEnginePower() * 0.01 * turbo;
     }
 

@@ -52,7 +52,6 @@ public class Ferry implements IMoveable, ITiltable, ITransport {
         parentMoveable.brake(amount);
     }
 
-    @Override
     public double speedFactor() {
         return parentMoveable.speedFactor();
     }
@@ -100,6 +99,7 @@ public class Ferry implements IMoveable, ITiltable, ITransport {
         if (parentTransport.isRampOpen() && !getCars().isEmpty()) {
             Car car = getCars().remove(0);
             car.setPosition(new Point(getX(), getY()));
+            car.setLoaded(false);
             return car;
         }
         return null;

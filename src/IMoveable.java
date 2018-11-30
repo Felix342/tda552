@@ -14,8 +14,6 @@ public interface IMoveable {
 
     double getCurrentSpeed();
 
-    double speedFactor();
-
     double getX();
 
     double getY();

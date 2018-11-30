@@ -27,11 +27,17 @@ class Transport implements ITransport, ITiltable {
         }
     }
 
+    /**
+     * Loads a car if possible.
+     * @param c the car to be loaded.
+     * @return true if the car could be loaded, false otherwise.
+     */
     @Override
     public boolean load(Car c) {
         if (rampOpen && parentMoveable.distance(c) <= 2 && cars.size() < maxCars && getCargoWeight() + c.getWeight() <= maxWeight &&
-                c.parentMoveable != parentMoveable) {
+                !(c instanceof CarTransport) && !c.isLoaded()) {
             c.setPosition(parentMoveable.getPosition());
+            c.setLoaded(true);
             return cars.add(c);
         }
         return false;
@@ -42,6 +48,10 @@ class Transport implements ITransport, ITiltable {
         return null;
     }
 
+    /**
+     * Calculates the weight of the loaded cars.
+     * @return the weight of the loaded cars.
+     */
     @Override
     public double getCargoWeight() {
         double sum = 0;

@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Abstract class containing common data for cars. The class also contains methods for driving a car.
@@ -15,6 +16,8 @@ public abstract class Car implements IMoveable {
     private String modelName;
     private double weight;
     protected Moveable parentMoveable;
+    private boolean loaded = false;
+    private BufferedImage image;
 
     /**
      * Constructor that sets initial values, and stops the car's engine.
@@ -24,12 +27,14 @@ public abstract class Car implements IMoveable {
      * @param color Color
      * @param modelName Model Name
      */
-    public Car(int nrDoors, double enginePower, double weight, Color color, String modelName) {
+    public Car(int nrDoors, double enginePower, double weight, Color color, String modelName, double x, double y) {
         this.nrDoors = nrDoors;
         this.weight = weight;
         this.color = color;
         this.modelName = modelName;
         parentMoveable = new Moveable(enginePower);
+        setX(x);
+        setY(y);
         stopEngine();
     }
 
@@ -38,7 +43,7 @@ public abstract class Car implements IMoveable {
      * Constructor without parameters
      */
     public Car(){
-        this(0, 0, 0, null, null);
+        this(0, 0, 0, null, null, 0, 0);
         parentMoveable = new Moveable(0);
     }
 
@@ -59,7 +64,7 @@ public abstract class Car implements IMoveable {
     }
 
 
-    public void setCurrentSpeed(double amount) {
+    private void setCurrentSpeed(double amount) {
         parentMoveable.setCurrentSpeed(amount);
     }
 
@@ -79,11 +84,11 @@ public abstract class Car implements IMoveable {
         return getPosition().getY();
     }
 
-    public void setX(double x) {
+    void setX(double x) {
         parentMoveable.setX(x);
     }
 
-    public void setY(double y) {
+    void setY(double y) {
         parentMoveable.setY(y);
     }
 
@@ -107,11 +112,21 @@ public abstract class Car implements IMoveable {
         return parentMoveable.isMoving();
     }
 
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
     /**
      * Sets the car's speed to 0.1
      */
     public void startEngine(){
-        setCurrentSpeed(0.1);
+        if(!loaded) {
+            setCurrentSpeed(0.1);
+        }
     }
 
     /**
@@ -134,7 +149,9 @@ public abstract class Car implements IMoveable {
      * Method that changes car's x- and y position according to it's current speed and orientation
      */
     public void move(){
-        parentMoveable.move();
+        if (!loaded) {
+            parentMoveable.move();
+        }
     }
 
     /**
@@ -142,14 +159,18 @@ public abstract class Car implements IMoveable {
      * of enums to get the "next" orientation.
      */
     public void turnLeft(){
-        parentMoveable.turnLeft();
+        if (!loaded) {
+            parentMoveable.turnLeft();
+        }
     }
 
     /**
      * The same as turnLeft(), except it gets the previous value in the array (3=-1)%4
      */
     public void turnRight(){
-        parentMoveable.turnRight();
+        if (!loaded) {
+            parentMoveable.turnRight();
+        }
     }
 
     /**
@@ -157,7 +178,9 @@ public abstract class Car implements IMoveable {
      * @param amount, where amount lies in the interval [0,1]
      */
     public void gas(double amount){
-        parentMoveable.gas(amount, speedFactor());
+        if (!loaded) {
+            parentMoveable.gas(amount, speedFactor());
+        }
     }
 
     /**
@@ -168,4 +191,11 @@ public abstract class Car implements IMoveable {
         parentMoveable.brake(amount, speedFactor());
     }
 
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
+    }
 }

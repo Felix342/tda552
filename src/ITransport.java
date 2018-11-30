@@ -1,3 +1,7 @@
+/**
+ * Methods that handle loading/unlosding of cars
+ */
+
 public interface ITransport {
     boolean load(Car c);
 
