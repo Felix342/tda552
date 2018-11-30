@@ -33,8 +33,8 @@ public class CarController {
         CarController cc = new CarController();
 
         cc.cars.add(new Volvo240(0, 0));
-        cc.cars.add(new Saab95(0, 200));
-        cc.cars.add(new Scania(0, 400));
+        cc.cars.add(new Saab95(0, 100));
+        cc.cars.add(new Scania(0, 200));
 
         // Start a new view and send a reference of self
         cc.frame = new CarView("CarSim 1.0", cc);
@@ -67,9 +67,9 @@ public class CarController {
 
     private boolean shouldTurn(Car car) {
         return  ((car.getX()<0 && car.getOrientation()==Orientation.LEFT)||
-                (car.getX()>frame.drawPanel.getWidth() - CAR_WIDTH && car.getOrientation()==Orientation.RIGHT)||
+                (car.getX()>=frame.drawPanel.getWidth() - CAR_WIDTH && car.getOrientation()==Orientation.RIGHT)||
                 (car.getY()<0 && car.getOrientation()==Orientation.UP)||
-                (car.getY()>frame.drawPanel.getHeight() - CAR_HEIGHT && car.getOrientation()==Orientation.DOWN)
+                (car.getY()>=frame.drawPanel.getHeight() - CAR_HEIGHT && car.getOrientation()==Orientation.DOWN)
         );
     }
 

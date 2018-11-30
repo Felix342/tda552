@@ -31,10 +31,12 @@ public class Scania extends Car implements ITiltable {
     }
 
     public void tiltDown() {
-        System.out.println("down");
-        this.angle -= getTiltFactor();
-        if (this.angle < 0) {
-            this.angle = 0;
+        if (!isMoving()) {
+            System.out.println("down");
+            this.angle -= getTiltFactor();
+            if (this.angle < 0) {
+                this.angle = 0;
+            }
         }
     }
 
@@ -42,6 +44,13 @@ public class Scania extends Car implements ITiltable {
     public void gas(double amount) {
         if (angle == 0) {
             super.gas(amount);
+        }
+    }
+
+    @Override
+    public void startEngine() {
+        if (angle == 0) {
+            super.startEngine();
         }
     }
 
