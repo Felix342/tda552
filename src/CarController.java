@@ -18,33 +18,18 @@ public class CarController {
     // each step between delays.
     private Timer timer = new Timer(delay, new TimerListener());
 
-    // The frame that represents this instance View of the MVC pattern
-    CarView frame;
-    // A list of cars, modify if needed
-    ArrayList<Car> cars = new ArrayList<>();
-
-    private static final int CAR_WIDTH = 100;
-    private static final int CAR_HEIGHT = 60;
-
+    static CarModel model = new CarModel();
     //methods:
 
-    public CarController() {
-        cars.add(CarFactory.createSaab95(0, 0));
-        cars.add(CarFactory.createVolvo240(0, 100));
-        cars.add(CarFactory.createScania(0, 200));
-
-    }
-
-    public static void main(String[] args) {
+    public CarController(){
         // Instance of this class
-        CarController cc = new CarController();
-
+       // CarModel cm = new CarModel();
 
         // Start a new view and send a reference of self
-        cc.frame = new CarView("CarSim 1.0", cc);
+        model.frame = new CarView("CarSim 1.0", model);
 
         // Start the timer
-        cc.timer.start();
+        this.timer.start();
     }
 
     /* Each step the TimerListener moves all the cars in the list and tells the
@@ -52,89 +37,51 @@ public class CarController {
      * */
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            for (Car car : cars) {
-                if (shouldTurn(car)) {
-                    car.stopEngine();
-                    car.turnRight();
-                    car.turnRight();
-                    car.startEngine();
-                }
-                car.move();
+            model.update();
                 /*int x = (int) Math.round(car.getPosition().getX());
                 int y = (int) Math.round(car.getPosition().getY());
                 frame.drawPanel.moveit(x, y);*/
                 // repaint() calls the paintComponent method of the panel
-                frame.drawPanel.repaint();
-            }
+            model.frame.drawPanel.repaint();
         }
     }
 
     private boolean shouldTurn(Car car) {
-        return  ((car.getX()<0 && car.getOrientation()==Orientation.LEFT)||
-                (car.getX()>=frame.drawPanel.getWidth() - CAR_WIDTH && car.getOrientation()==Orientation.RIGHT)||
-                (car.getY()<0 && car.getOrientation()==Orientation.UP)||
-                (car.getY()>=frame.drawPanel.getHeight() - CAR_HEIGHT && car.getOrientation()==Orientation.DOWN)
-        );
+        return  model.shouldTurn(car);
     }
 
 
     // Calls the gas method for each car once
     void gas(int amount) {
-        double gas = ((double) amount) / 100;
-        for (Car car : cars) {
-            car.gas(gas);
-        }
+        model.gas(amount);
     }
 
     void brake(int amount) {
-        double brake = ((double) amount) / 100;
-        for (Car car : cars) {
-            car.brake(brake);
-        }
+        model.brake(amount);
     }
 
     void turboOn() {
-        for (Car c : cars) {
-            if (c instanceof Saab95) {
-                ((Saab95) c).setTurboOn();
-            }
-        }
+        model.turboOn();
     }
 
     void turboOff() {
-        for (Car c : cars) {
-            if (c instanceof Saab95) {
-                ((Saab95) c).setTurboOff();
-            }
-        }
+        model.turboOff();
     }
 
     void liftBed() {
-        for (Car c : cars) {
-            if (c instanceof ITiltable) {
-                ((ITiltable) c).tiltUp();
-            }
-        }
+        model.liftBed();
     }
 
     void lowerBed() {
-        for (Car c : cars) {
-            if (c instanceof ITiltable) {
-                ((ITiltable) c).tiltDown();
-            }
-        }
+        model.lowerBed();
     }
 
     void startAll() {
-        for (Car c : cars) {
-            c.startEngine();
-        }
+        model.startAll();
     }
 
     void stopAll() {
-        for (Car c : cars) {
-            c.stopEngine();
-        }
+        model.stopAll();
     }
 
 
