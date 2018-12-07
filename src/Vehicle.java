@@ -1,12 +1,14 @@
-public class Moveable implements IMoveable {
+public abstract class Vehicle {
 
     private double currentSpeed;
     private Point position;
     private Orientation orientation;
     private double enginePower;
+    private double weight;
 
 
-    public Moveable(double enginePower) {
+    public Vehicle(double enginePower, double weight) {
+        this.weight = weight;
         this.enginePower = enginePower;
         currentSpeed = 0;
         position = new Point(0, 0);
@@ -15,12 +17,12 @@ public class Moveable implements IMoveable {
 
     /**
      * Returns the distance between two IMoveables.
-     * @param moveable moveable to find distance to
+     * @param c moveable to find distance to
      * @return the distance between the this and moveable
      */
-    public double distance (IMoveable moveable) {
-        double dx = getX()-moveable.getX();
-        double dy = getY()-moveable.getY();
+    public double distance (Car c) {
+        double dx = getX() - c.getX();
+        double dy = getY() - c.getY();
         double d = Math.pow(dx, 2) + Math.pow(dy, 2);
         return Math.sqrt(d);
     }
@@ -30,9 +32,7 @@ public class Moveable implements IMoveable {
      * when the gas() and break() methods are called
      * @return the moveable's speed factor
      */
-    protected double speedFactor() {
-        return 1;
-    }
+    protected abstract double speedFactor();
 
     /**
      * Checks weather this is moving
@@ -74,6 +74,10 @@ public class Moveable implements IMoveable {
                 setY(getY()+getCurrentSpeed());
                 break;
         }
+    }
+
+    public double getWeight() {
+        return weight;
     }
 
     /**

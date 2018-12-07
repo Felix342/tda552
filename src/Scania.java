@@ -41,6 +41,11 @@ public class Scania extends Car implements ITiltable {
     }
 
     @Override
+    protected double speedFactor() {
+        return 1;
+    }
+
+    @Override
     public void gas(double amount) {
         if (angle == 0) {
             super.gas(amount);

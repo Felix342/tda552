@@ -1,59 +1,16 @@
-import java.util.ArrayList;
 import java.util.List;
 
-public class Ferry implements IMoveable, ITiltable, ITransport {
+public class Ferry extends Vehicle implements ITiltable, ITransport {
     private Transport parentTransport;
-    private Moveable parentMoveable;
 
     public Ferry() {
-        parentMoveable = new Moveable(100);
-        this.parentTransport = new Transport(50, 100000, parentMoveable);
+        super(100, 200);
+        this.parentTransport = new Transport(50, 100000, this);
     }
 
     @Override
-    public void move() {
-        parentMoveable.move();
-    }
-
-    /**
-     * Method that changes that changes the car's orientation depending on it's current orientation. It uses an array
-     * of enums to get the "next" orientation.
-     */
-    public void turnLeft(){
-        parentMoveable.turnLeft();
-    }
-
-    /**
-     * The same as turnLeft(), except it gets the previous value in the array (3=-1)%4
-     */
-    public void turnRight(){
-        parentMoveable.turnRight();
-    }
-
-    public Orientation getOrientation() {
-        return parentMoveable.getOrientation();
-    }
-
-    @Override
-    public boolean isMoving() {
-        return parentMoveable.isMoving();
-    }
-
-    @Override
-    public double getCurrentSpeed() {
-        return parentMoveable.getCurrentSpeed();
-    }
-
-    public void gas(double amount) {
-        parentMoveable.gas(amount);
-    }
-
-    public void brake(double amount) {
-        parentMoveable.brake(amount);
-    }
-
-    public double speedFactor() {
-        return parentMoveable.speedFactor();
+    protected double speedFactor() {
+        return 1;
     }
 
     @Override
@@ -64,16 +21,6 @@ public class Ferry implements IMoveable, ITiltable, ITransport {
     @Override
     public double getY() {
         return getPosition().getY();
-    }
-
-    @Override
-    public void setPosition(Point p) {
-        parentMoveable.setPosition(p);
-    }
-
-    @Override
-    public Point getPosition() {
-        return parentMoveable.getPosition();
     }
 
     public boolean isRampOpen() {
@@ -87,11 +34,18 @@ public class Ferry implements IMoveable, ITiltable, ITransport {
 
     @Override
     public void tiltDown() {
-        parentTransport.tiltDown();
+        if (!isMoving()) {
+            parentTransport.tiltDown();
+        }
     }
 
     public boolean load(Car car) {
-        return parentTransport.load(car);
+        if( distance(car) <= 2){
+            car.setPosition(getPosition());
+            return parentTransport.load(car);
+        }else {
+            return false;
+        }
     }
 
     @Override

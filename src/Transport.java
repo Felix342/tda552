@@ -6,13 +6,11 @@ class Transport implements ITransport, ITiltable {
     private final int maxCars;
     private final double maxWeight;
     private final List<Car> cars = new ArrayList<>();
-    private final Moveable parentMoveable;
 
-    public Transport(int maxCars, double maxWeight, Moveable parentMoveable) {
+    public Transport(int maxCars, double maxWeight, Vehicle parentVehicle) {
         this.rampOpen = false;
         this.maxCars = maxCars;
         this.maxWeight = maxWeight;
-        this.parentMoveable = parentMoveable;
     }
 
     @Override
@@ -22,9 +20,7 @@ class Transport implements ITransport, ITiltable {
 
     @Override
     public void tiltDown() {
-        if (!parentMoveable.isMoving()) {
-            rampOpen = true;
-        }
+        rampOpen = true;
     }
 
     /**
@@ -34,9 +30,7 @@ class Transport implements ITransport, ITiltable {
      */
     @Override
     public boolean load(Car c) {
-        if (rampOpen && parentMoveable.distance(c) <= 2 && cars.size() < maxCars && getCargoWeight() + c.getWeight() <= maxWeight &&
-                !(c instanceof CarTransport) && !c.isLoaded()) {
-            c.setPosition(parentMoveable.getPosition());
+        if (rampOpen && cars.size() < maxCars && getCargoWeight() + c.getWeight() <= maxWeight  && !c.isLoaded()) {
             c.setLoaded(true);
             return cars.add(c);
         }

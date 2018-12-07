@@ -1,13 +1,12 @@
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
-public class CarTransport extends Car implements ITiltable, ITransport, IMoveable{
+public class CarTransport extends Car implements ITiltable, ITransport{
     private Transport parentTransport;
 
     public CarTransport(double x, double y){
         super(2, 100, 2500, Color.BLUE, "Car Transport 1", x, y);
-        parentTransport = new Transport(10, 20000, parentMoveable);
+        parentTransport = new Transport(10, 20000, this);
     }
 
 
@@ -22,11 +21,18 @@ public class CarTransport extends Car implements ITiltable, ITransport, IMoveabl
 
     @Override
     public void tiltDown() {
-        parentTransport.tiltDown();
+        if (!isMoving()) {
+            parentTransport.tiltDown();
+        }
     }
 
     public boolean load(Car car) {
-        return parentTransport.load(car);
+        if( distance(car) <= 2){
+            car.setPosition(getPosition());
+            return parentTransport.load(car);
+        }else {
+            return false;
+        }
     }
 
     /**
@@ -61,5 +67,10 @@ public class CarTransport extends Car implements ITiltable, ITransport, IMoveabl
 
     public List<Car> getCars() {
         return parentTransport.getCars();
+    }
+
+    @Override
+    protected double speedFactor() {
+        return 1;
     }
 }
