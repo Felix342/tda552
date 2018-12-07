@@ -9,13 +9,11 @@ import java.awt.image.BufferedImage;
  * @author Matilda
  */
 
-public abstract class Car implements IMoveable {
+public abstract class Car extends Vehicle {
 
     private int nrDoors;
     private Color color;
     private String modelName;
-    private double weight;
-    protected Moveable parentMoveable;
     private boolean loaded = false;
     private BufferedImage image;
 
@@ -28,14 +26,14 @@ public abstract class Car implements IMoveable {
      * @param modelName Model Name
      */
     public Car(int nrDoors, double enginePower, double weight, Color color, String modelName, double x, double y) {
+        super(enginePower, weight);
         this.nrDoors = nrDoors;
-        this.weight = weight;
         this.color = color;
         this.modelName = modelName;
-        parentMoveable = new Moveable(enginePower);
         setX(x);
         setY(y);
         stopEngine();
+        this.getEnginePower();
     }
 
 
@@ -44,32 +42,10 @@ public abstract class Car implements IMoveable {
      */
     public Car(){
         this(0, 0, 0, null, null, 0, 0);
-        parentMoveable = new Moveable(0);
     }
 
     public int getNrDoors() {
         return nrDoors;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public double getEnginePower() {
-        return parentMoveable.getEnginePower();
-    }
-
-    public double getCurrentSpeed() {
-        return parentMoveable.getCurrentSpeed();
-    }
-
-
-    private void setCurrentSpeed(double amount) {
-        parentMoveable.setCurrentSpeed(amount);
-    }
-
-    public Orientation getOrientation() {
-        return parentMoveable.getOrientation();
     }
 
     public String getModelName() {
@@ -84,21 +60,6 @@ public abstract class Car implements IMoveable {
         return getPosition().getY();
     }
 
-    void setX(double x) {
-        parentMoveable.setX(x);
-    }
-
-    void setY(double y) {
-        parentMoveable.setY(y);
-    }
-
-    public void setPosition(Point p) {
-        parentMoveable.setPosition(p);
-    }
-
-    public Point getPosition() {
-        return parentMoveable.getPosition();
-    }
 
     public Color getColor() {
         return color;
@@ -106,10 +67,6 @@ public abstract class Car implements IMoveable {
 
     public void setColor(Color color) {
         this.color = color;
-    }
-
-    public boolean isMoving() {
-        return parentMoveable.isMoving();
     }
 
     public BufferedImage getImage() {
@@ -136,21 +93,13 @@ public abstract class Car implements IMoveable {
         setCurrentSpeed(0);
     }
 
-    /**
-     * Abstract method that returns a factor used in determining how much the car's speed should increase or decrease
-     * when the gas() and break() methods are called
-     * @return the car's speed factor
-     */
-    public double speedFactor() {
-        return parentMoveable.speedFactor();
-    }
 
     /**
      * Method that changes car's x- and y position according to it's current speed and orientation
      */
     public void move(){
         if (!loaded) {
-            parentMoveable.move();
+            super.move();
         }
     }
 
@@ -160,7 +109,7 @@ public abstract class Car implements IMoveable {
      */
     public void turnLeft(){
         if (!loaded) {
-            parentMoveable.turnLeft();
+            super.turnLeft();
         }
     }
 
@@ -169,7 +118,7 @@ public abstract class Car implements IMoveable {
      */
     public void turnRight(){
         if (!loaded) {
-            parentMoveable.turnRight();
+            super.turnRight();
         }
     }
 
@@ -179,7 +128,7 @@ public abstract class Car implements IMoveable {
      */
     public void gas(double amount){
         if (!loaded) {
-            parentMoveable.gas(amount, speedFactor());
+            gas(amount, speedFactor());
         }
     }
 
@@ -188,7 +137,7 @@ public abstract class Car implements IMoveable {
      * @param amount, where amount lies in the interval [0,1]
      */
     public void brake(double amount){
-        parentMoveable.brake(amount, speedFactor());
+        brake(amount, speedFactor());
     }
 
     public boolean isLoaded() {
