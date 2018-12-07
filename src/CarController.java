@@ -24,6 +24,7 @@ public class CarController {
     public CarController(){
         // Instance of this class
        // CarModel cm = new CarModel();
+
         // Start a new view and send a reference of self
         model.frame = new CarView("CarSim 1.0", model);
 
